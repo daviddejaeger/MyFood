@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "83369337916",
+    "firebase_url": "https://myfood-4b750.firebaseio.com",
+    "project_id": "myfood-4b750",
+    "storage_bucket": "myfood-4b750.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83369337916:android:727324e26a63b633",
+        "android_client_info": {
+          "package_name": "ursius.myfood"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "83369337916-siph3kniqfpco0jbrepkrnj65rp3erpr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ursius.myfood",
+            "certificate_hash": "0fb50c58966023058abdb81682abd73d93277c26"
+          }
+        },
+        {
+          "client_id": "83369337916-v6qv5rotndufrdclpjhstialsaff9ck7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnwEYQHHddi-QwMgAkQG4tS6vj56BIo6o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83369337916-v6qv5rotndufrdclpjhstialsaff9ck7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
