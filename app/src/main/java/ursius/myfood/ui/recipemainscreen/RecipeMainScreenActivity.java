@@ -10,6 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+
 import java.util.List;
 
 import ursius.myfood.R;
@@ -20,11 +26,8 @@ import ursius.myfood.ui.ViewInterface;
 
 public class RecipeMainScreenActivity extends AppCompatActivity implements ViewInterface {
 
-    private List<Recipe> listOfRecipes;
-    private LayoutInflater layoutInflater;
-    private Controller controller;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private FirestoreRecyclerAdapter<Recipe, RecipeHolder> adapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
@@ -32,10 +35,7 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_main_screen);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
-        layoutInflater = getLayoutInflater();
-
-        controller = new Controller(this, new FakeDataSource());
+        mRecyclerView = findViewById(R.id.my_recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
@@ -45,9 +45,51 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
-        //mAdapter = new MyAdapter(myDataset);
-        mRecyclerView.setAdapter(mAdapter);
+        Query query = FirebaseFirestore.getInstance()
+                .collection("recipes");
+
+        // Configure recycler adapter options:
+        //  * query is the Query object defined above.
+        //  * Recipe.class instructs the adapter to convert each DocumentSnapshot to a Recipe object
+        FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>()
+                .setQuery(query, Recipe.class)
+                .build();
+
+        adapter = new FirestoreRecyclerAdapter<Recipe, RecipeHolder>(options) {
+            @Override
+            public void onBindViewHolder(RecipeHolder holder, int position, Recipe model) {
+                // Bind the Recipe object to the RecipeHolder
+                // ...
+                holder.setTitle(model.getTitle());
+                holder.setDescription(model.getDescription());
+            }
+
+            @Override
+            public RecipeHolder onCreateViewHolder(ViewGroup group, int i) {
+                // Create a new instance of the ViewHolder, in this case we are using a custom
+                // layout called R.layout.message for each item
+                View view = LayoutInflater.from(group.getContext())
+                        .inflate(R.layout.item_recipe, group, false);
+
+                return new RecipeHolder(view);
+            }
+
+            @Override
+            public void onDataChanged() {
+                // Called each time there is a new query snapshot. You may want to use this method
+                // to hide a loading spinner or check for the "no documents" state and update your UI.
+                // ...
+            }
+
+            @Override
+            public void onError(FirebaseFirestoreException e) {
+                // Called when there is an error getting a query snapshot. You may want to update
+                // your UI to display an error message to the user.
+                // ...
+            }
+        };
+
+        mRecyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -60,48 +102,55 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
 
     }
 
-    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
+    private class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @NonNull
-        @Override
-        public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            return null;
+        private TextView mTextViewTitle;
+        private TextView mTextViewDescription;
+        private TextView mEditTextView;
+        private TextView mDeleteTextView;
+
+        public RecipeHolder(View itemView) {
+            super(itemView);
+
+            this.mEditTextView = itemView.findViewById(R.id.btnEdit);
+            this.mDeleteTextView = itemView.findViewById(R.id.btnDelete);
+
+            mEditTextView.setOnClickListener(this);
+            mDeleteTextView.setOnClickListener(this);
         }
 
         @Override
-        public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
+        public void onClick(View view) {
+            /*Recipe recipe = listOfRecipes.get(this.getAdapterPosition());
+            Recipe item = mDataset.get(this.getAdapterPosition());
+            if (view.getId() == mEditTextView.getId()){
+                mRecyclerViewClickListener.onEditClick(item,view);
+            } else if(view.getId() == mDeleteTextView.getId()){
+                mRecyclerViewClickListener.onDeleteClick(item,view);
+            }*/
         }
 
-        @Override
-        public int getItemCount() {
-            return 0;
+        public void setTitle(String title) {
+            this.mTextViewTitle = itemView.findViewById(R.id.textView_recipe_title);
+            mTextViewTitle.setText(title);
         }
 
-        class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-            private TextView mTextViewTitle;
-            private TextView mTextViewDescription;
-            private TextView mEditTextView;
-            private TextView mDeleteTextView;
-
-            public MyViewHolder(View itemView) {
-                super(itemView);
-
-                this.mTextViewTitle = itemView.findViewById(R.id.textView_recipe_title);
-                this.mTextViewDescription = itemView.findViewById(R.id.textView_recipe_description);
-                this.mEditTextView = itemView.findViewById(R.id.btnEdit);
-                this.mDeleteTextView = itemView.findViewById(R.id.btnDelete);
-
-                mEditTextView.setOnClickListener(this);
-                mDeleteTextView.setOnClickListener(this);
-            }
-
-            @Override
-            public void onClick(View v) {
-                Recipe recipe = listOfRecipes.get(this.getAdapterPosition());
-                controller.get
-            }
+        public void setDescription(String description) {
+            this.mTextViewDescription = itemView.findViewById(R.id.textView_recipe_description);
+            mTextViewDescription.setText(description);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
     }
 }

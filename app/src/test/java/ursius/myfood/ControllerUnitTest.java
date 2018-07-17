@@ -37,6 +37,7 @@ public class ControllerUnitTest {
     Controller controller;
 
     private static final Recipe testRecipe =  new Recipe(
+            "uidtest",
             "Ovenschotel met speltpasta, kalfsgehaktballetjes en broccoli",
             "Sandra Bekkari - p.133",
             new Date(System.currentTimeMillis()-10000),

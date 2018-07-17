@@ -18,6 +18,7 @@ public class FakeDataSource implements DataSourceInterface
         ingRecipe1.add("250g gehakt");
         ingRecipe1.add("250g americain");
         listOfRecipes.add(new Recipe(
+                "uid1",
                 "Spaghetti Bolognaise",
                 "Snelle manier met frito",
                 new Date(System.currentTimeMillis()-1000),
@@ -27,9 +28,10 @@ public class FakeDataSource implements DataSourceInterface
                 ));
 
         ArrayList<String> ingRecipe2 = new ArrayList<>();
-        ingRecipe1.add("2 blikjes kokosmelk");
-        ingRecipe1.add("2 el gele curry");
+        ingRecipe2.add("2 blikjes kokosmelk");
+        ingRecipe2.add("2 el gele curry");
         listOfRecipes.add(new Recipe(
+                "uid2",
                 "Kip curry",
                 "Met echte curry",
                 new Date(System.currentTimeMillis()-10000),
@@ -42,6 +44,7 @@ public class FakeDataSource implements DataSourceInterface
         ingRecipe3.add("1 broccoli");
         ingRecipe3.add("250g kalfsgehakt");
         listOfRecipes.add(new Recipe(
+                "uid3",
                 "Ovenschotel met speltpasta, kalfsgehaktballetjes en broccoli",
                 "Sandra Bekkari - p.133",
                 new Date(System.currentTimeMillis()-10000),

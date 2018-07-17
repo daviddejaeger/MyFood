@@ -25,6 +25,8 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 import java.util.Arrays;
 import java.util.List;
 
+import ursius.myfood.ui.recipemainscreen.RecipeMainScreenActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     // Choose an arbitrary request code value
@@ -111,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.recipes:
-                //ToDO: Show recipeActivity
+                startActivity(new Intent(this,RecipeMainScreenActivity.class));
                 return true;
 
             default:
