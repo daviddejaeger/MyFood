@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             // already signed in
             FirebaseUser user = mAuth.getCurrentUser();
-            //ToDO: Show user and rest of MainActivity
+            //ToDO: Show user in toolbar and rest of MainActivity
         } else {
             // not signed in
             startActivityForResult(

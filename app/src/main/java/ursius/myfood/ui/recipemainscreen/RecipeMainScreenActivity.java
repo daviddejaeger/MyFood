@@ -1,10 +1,13 @@
 package ursius.myfood.ui.recipemainscreen;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +26,7 @@ import ursius.myfood.service.Controller;
 import ursius.myfood.service.FakeDataSource;
 import ursius.myfood.ui.Recipe;
 import ursius.myfood.ui.ViewInterface;
+import ursius.myfood.ui.recipedetailscreen.RecipeDetailScreenActivity;
 
 public class RecipeMainScreenActivity extends AppCompatActivity implements ViewInterface {
 
@@ -34,6 +38,22 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_main_screen);
+
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //ToDo: go to detail Activity
+                Intent intent = new Intent(RecipeMainScreenActivity.this, RecipeDetailScreenActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mRecyclerView = findViewById(R.id.my_recycler_view);
 
@@ -152,5 +172,11 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 }

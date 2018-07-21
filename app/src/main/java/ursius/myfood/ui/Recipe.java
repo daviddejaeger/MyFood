@@ -1,9 +1,10 @@
 package ursius.myfood.ui;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Recipe
+public class Recipe implements Serializable
 {
     private String uid;
     private String title;
