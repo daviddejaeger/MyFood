@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.recipedetailscreen.RecipeDetailScreenActivity">
+    tools:context=".ui.recipedetailscreen.RecipeDetailScreenActivity"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
         android:id="@+id/textViewRecipeTitle"
@@ -12,42 +13,48 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:labelFor="@id/editTextRecipeTitle"
         android:text="@string/TextViewRecipeTitle"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextRecipeTitle"
-        android:layout_width="157dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
-        android:inputType="textPersonName"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textViewRecipeTitle"
-        app:layout_constraintStart_toEndOf="@+id/textViewRecipeTitle" />
+        android:layout_marginTop="16dp"
+        android:inputType="text"
+        android:singleLine="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRecipeTitle" />
 
     <TextView
         android:id="@+id/textViewRecipeDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
+        android:labelFor="@id/editTextRecipeDescription"
         android:text="@string/TextViewRecipeDescription"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRecipeTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextRecipeTitle" />
 
     <EditText
         android:id="@+id/editTextRecipeDescription"
-        android:layout_width="102dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textViewRecipeDescription"
-        app:layout_constraintStart_toEndOf="@+id/textViewRecipeDescription" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRecipeDescription" />
 
     <TextView
         android:id="@+id/textViewRecipeLastEaten"
@@ -55,20 +62,24 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
+        android:labelFor="@id/editTextRecipeLastEaten"
         android:text="@string/TextViewRecipeLastEaten"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewRecipeDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextRecipeDescription" />
 
     <EditText
         android:id="@+id/editTextRecipeLastEaten"
-        android:layout_width="108dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:ems="10"
+        android:focusable="false"
         android:inputType="date"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:onClick="showDatePickerDialog"
         app:layout_constraintBaseline_toBaselineOf="@+id/textViewRecipeLastEaten"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/textViewRecipeLastEaten" />
 
     <TextView
@@ -76,53 +87,57 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
+        android:labelFor="@id/ratingBar"
         android:text="@string/TextViewRecipePoints"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewRecipeLastEaten" />
-
-    <EditText
-        android:id="@+id/editTextRecipePoints"
-        android:layout_width="141dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:ems="10"
-        android:inputType="numberDecimal"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textViewRecipePoints"
-        app:layout_constraintStart_toEndOf="@+id/textViewRecipePoints" />
 
     <TextView
         android:id="@+id/textViewRecipeRemarks"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
+        android:labelFor="@id/editTextRecipeRemarks"
         android:text="@string/TextViewRecipeRemarks"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewRecipePoints" />
 
     <EditText
         android:id="@+id/editTextRecipeRemarks"
-        android:layout_width="121dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textMultiLine"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"
-        app:layout_constraintBaseline_toBaselineOf="@+id/textViewRecipeRemarks"
-        app:layout_constraintStart_toEndOf="@+id/textViewRecipeRemarks" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRecipeRemarks" />
 
-    <Button
-        android:id="@+id/buttonPickDate"
+    <RatingBar
+        android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:onClick="showDatePickerDialog"
-        android:text="@string/ButtonDatePicker"
-        app:layout_constraintBaseline_toBaselineOf="@+id/editTextRecipeLastEaten"
-        app:layout_constraintStart_toEndOf="@+id/editTextRecipeLastEaten" />
+        android:layout_marginTop="24dp"
+        android:numStars="5"
+        android:stepSize=".5"
+        app:layout_constraintStart_toEndOf="@+id/textViewRecipePoints"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRecipeLastEaten" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/buttonSaveText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextRecipeRemarks" />
 
 </android.support.constraint.ConstraintLayout>
