@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -33,6 +35,7 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
     private RecyclerView mRecyclerView;
     private FirestoreRecyclerAdapter<Recipe, RecipeHolder> adapter;
     private RecyclerView.LayoutManager mLayoutManager;
+    private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,8 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         Query query = FirebaseFirestore.getInstance()
-                .collection("recipes");
+                .collection("recipes")
+                .whereEqualTo("uid",currentUser.getUid());
 
         // Configure recycler adapter options:
         //  * query is the Query object defined above.

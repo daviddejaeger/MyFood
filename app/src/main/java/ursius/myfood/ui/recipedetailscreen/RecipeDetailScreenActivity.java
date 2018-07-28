@@ -2,33 +2,66 @@ package ursius.myfood.ui.recipedetailscreen;
 
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
+import android.content.Intent;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RatingBar;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import ursius.myfood.R;
 import ursius.myfood.service.pickers.DatePickerFragment;
+import ursius.myfood.ui.Recipe;
+import ursius.myfood.ui.recipemainscreen.RecipeMainScreenActivity;
 
 public class RecipeDetailScreenActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+
+    private EditText mTitle;
+    private EditText mDescription;
+    private EditText mLastEaten;
+    private Date dateLastEaten;
+    private EditText mRemarks;
+    private RatingBar mRating;
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail_screen);
 
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        setSupportActionBar(myToolbar);
 
-        EditText editTextDescription = findViewById(R.id.editTextRecipeDescription);
-        EditText editTextRemarks = findViewById(R.id.editTextRecipeRemarks);
-        editTextDescription.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        editTextDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
-        editTextRemarks.setImeOptions(EditorInfo.IME_ACTION_DONE);
-        editTextRemarks.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        mDescription = findViewById(R.id.editTextRecipeDescription);
+        mRemarks = findViewById(R.id.editTextRecipeRemarks);
+        mTitle = findViewById(R.id.editTextRecipeTitle);
+        mLastEaten = findViewById(R.id.editTextRecipeLastEaten);
+        mRating = findViewById(R.id.ratingBar);
+
+        mDescription.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        mRemarks.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mRemarks.setRawInputType(InputType.TYPE_CLASS_TEXT);
     }
 
     public void showDatePickerDialog(View v) {
@@ -44,7 +77,46 @@ public class RecipeDetailScreenActivity extends AppCompatActivity implements Dat
         Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, dayOfMonth);
 
-        //calendar.getTime()
+        dateLastEaten = calendar.getTime();
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+
+    public void onSaveButtonClicked(View view){
+        Recipe recipe =  new Recipe();
+        recipe.setTitle(mTitle.getText().toString());
+        recipe.setDescription(mDescription.getText().toString());
+        recipe.setLastEaten(dateLastEaten);
+        recipe.setRemarks(mRemarks.getText().toString());
+        recipe.setPoints(mRating.getRating());
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        recipe.setUid(user.getUid());
+
+        db.collection("recipes")
+                .add(recipe)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        startActivity(new Intent(RecipeDetailScreenActivity.this,RecipeMainScreenActivity.class));
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Log.w(TAG, "Error adding document", e);
+                        showSnackbar(R.string.ErrorSave);
+                    }
+                });
+    }
+
+    private void showSnackbar(int message){
+        Snackbar.make(findViewById(R.id.myCoordinatorLayout), message, Snackbar.LENGTH_SHORT)
+                .show();
+    }
 }

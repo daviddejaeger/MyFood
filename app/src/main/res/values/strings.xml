@@ -11,4 +11,5 @@
     <string name="TextViewRecipeRemarks">Remarks:</string>
     <string name="ButtonDatePicker">Pick Date</string>
     <string name="buttonSaveText">Save Recipe</string>
+    <string name="ErrorSave">Error saving</string>
 </resources>
