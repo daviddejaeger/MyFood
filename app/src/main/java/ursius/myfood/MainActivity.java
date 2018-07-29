@@ -39,14 +39,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button button = findViewById(R.id.signOutButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                // Code here executes on main thread after user presses button
-                signOut();
-            }
-        });
-
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
 
@@ -64,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
                             .setIsSmartLockEnabled(!BuildConfig.DEBUG /* credentials */, true /* hints */)
                             .setAvailableProviders(Arrays.asList(
                                     new AuthUI.IdpConfig.EmailBuilder().build(),
+                                    new AuthUI.IdpConfig.FacebookBuilder().build(),
                                     new AuthUI.IdpConfig.GoogleBuilder().build()))
                             .build(),
                     RC_SIGN_IN);
@@ -115,7 +108,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.recipes:
                 startActivity(new Intent(this,RecipeMainScreenActivity.class));
                 return true;
-
+            case R.id.signOut:
+                signOut();
+                return true;
             default:
                 // If we got here, the user's action was not recognized.
                 // Invoke the superclass to handle it.

@@ -12,4 +12,11 @@
     <string name="ButtonDatePicker">Pick Date</string>
     <string name="buttonSaveText">Save Recipe</string>
     <string name="ErrorSave">Error saving</string>
+    <string name="sign_out">Sign Out</string>
+
+    <!-- Facebook application ID and custom URL scheme (app ID prefixed by 'fb'). -->
+    <string name="facebook_application_id" translatable="false">2127392894208142</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb2127392894208142</string>
+    <string name="MainActivityTitle">Top suggestions</string>
+    <string name="ButtonRecalculate">Recalculate</string>
 </resources>
