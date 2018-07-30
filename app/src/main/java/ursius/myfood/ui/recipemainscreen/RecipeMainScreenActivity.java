@@ -3,11 +3,13 @@ package ursius.myfood.ui.recipemainscreen;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +17,12 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.firebase.ui.firestore.SnapshotParser;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
@@ -24,8 +30,6 @@ import com.google.firebase.firestore.Query;
 import java.util.List;
 
 import ursius.myfood.R;
-import ursius.myfood.service.Controller;
-import ursius.myfood.service.FakeDataSource;
 import ursius.myfood.ui.Recipe;
 import ursius.myfood.ui.ViewInterface;
 import ursius.myfood.ui.recipedetailscreen.RecipeDetailScreenActivity;
@@ -36,6 +40,7 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
     private FirestoreRecyclerAdapter<Recipe, RecipeHolder> adapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private final FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +57,6 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //ToDo: go to detail Activity
                 Intent intent = new Intent(RecipeMainScreenActivity.this, RecipeDetailScreenActivity.class);
                 startActivity(intent);
             }
@@ -76,7 +80,14 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
         //  * query is the Query object defined above.
         //  * Recipe.class instructs the adapter to convert each DocumentSnapshot to a Recipe object
         FirestoreRecyclerOptions<Recipe> options = new FirestoreRecyclerOptions.Builder<Recipe>()
-                .setQuery(query, Recipe.class)
+                //.setQuery(query, Recipe.class)
+                .setQuery(query, new SnapshotParser<Recipe>() {
+                    @NonNull
+                    @Override
+                    public Recipe parseSnapshot(@NonNull DocumentSnapshot snapshot) {
+                        return snapshot.toObject(Recipe.class);
+                    }
+                })
                 .build();
 
         adapter = new FirestoreRecyclerAdapter<Recipe, RecipeHolder>(options) {
@@ -84,8 +95,39 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
             public void onBindViewHolder(RecipeHolder holder, int position, Recipe model) {
                 // Bind the Recipe object to the RecipeHolder
                 // ...
+                final Recipe recipe = model;
+                DocumentSnapshot snapshot =  getSnapshots().getSnapshot(holder.getAdapterPosition());
+                recipe.setId(snapshot.getId());
+
                 holder.setTitle(model.getTitle());
                 holder.setDescription(model.getDescription());
+                holder.mEditTextView.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        Intent intent = new Intent(RecipeMainScreenActivity.this, RecipeDetailScreenActivity.class);
+                        intent.putExtra("RECIPE", recipe);
+                        startActivity(intent);
+                    }
+                });
+                holder.mDeleteTextView.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View v){
+                        db.collection("recipes").document(recipe.getId())
+                                .delete()
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        //Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        showSnackbar(R.string.ErrorSave);
+                                    }
+                                });
+                    }
+                });
             }
 
             @Override
@@ -138,20 +180,11 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
 
             this.mEditTextView = itemView.findViewById(R.id.btnEdit);
             this.mDeleteTextView = itemView.findViewById(R.id.btnDelete);
-
-            mEditTextView.setOnClickListener(this);
-            mDeleteTextView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
-            /*Recipe recipe = listOfRecipes.get(this.getAdapterPosition());
-            Recipe item = mDataset.get(this.getAdapterPosition());
-            if (view.getId() == mEditTextView.getId()){
-                mRecyclerViewClickListener.onEditClick(item,view);
-            } else if(view.getId() == mDeleteTextView.getId()){
-                mRecyclerViewClickListener.onDeleteClick(item,view);
-            }*/
+
         }
 
         public void setTitle(String title) {
@@ -182,5 +215,9 @@ public class RecipeMainScreenActivity extends AppCompatActivity implements ViewI
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
+    }
+    private void showSnackbar(int message){
+        Snackbar.make(findViewById(R.id.myCoordinatorLayout), message, Snackbar.LENGTH_SHORT)
+                .show();
     }
 }

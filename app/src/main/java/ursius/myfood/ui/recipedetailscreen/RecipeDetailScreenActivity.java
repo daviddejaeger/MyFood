@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -36,6 +37,8 @@ public class RecipeDetailScreenActivity extends AppCompatActivity implements Dat
     private Date dateLastEaten;
     private EditText mRemarks;
     private RatingBar mRating;
+    private Recipe recipe;
+    private boolean isNew;
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
@@ -60,6 +63,28 @@ public class RecipeDetailScreenActivity extends AppCompatActivity implements Dat
         mDescription.setRawInputType(InputType.TYPE_CLASS_TEXT);
         mRemarks.setImeOptions(EditorInfo.IME_ACTION_DONE);
         mRemarks.setRawInputType(InputType.TYPE_CLASS_TEXT);
+
+        // Using getSerializableExtra(String key) method
+        recipe = (Recipe) getIntent().getSerializableExtra("RECIPE");
+        //Nieuw recept
+        if (recipe == null) {
+            recipe = new Recipe();
+            isNew = true;
+        }
+        //Bestaand recipt dus alle goed zetten
+        else{
+            mDescription.setText(recipe.getDescription());
+            mRemarks.setText(recipe.getRemarks());
+            mTitle.setText(recipe.getTitle());
+
+            SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
+            String strDate = "";
+            if (recipe.getLastEaten() != null)
+                strDate = sm.format(recipe.getLastEaten());
+            mLastEaten.setText(strDate);
+
+            mRating.setRating((float) recipe.getPoints());
+        }
     }
 
     public void showDatePickerDialog(View v) {
@@ -86,32 +111,54 @@ public class RecipeDetailScreenActivity extends AppCompatActivity implements Dat
 
 
     public void onSaveButtonClicked(View view){
-        Recipe recipe =  new Recipe();
+        //Recipe recipe =  new Recipe();
         recipe.setTitle(mTitle.getText().toString());
         recipe.setDescription(mDescription.getText().toString());
         recipe.setLastEaten(dateLastEaten);
         recipe.setRemarks(mRemarks.getText().toString());
         recipe.setPoints(mRating.getRating());
 
-        FirebaseUser user = mAuth.getCurrentUser();
-        recipe.setUid(user.getUid());
+        if (isNew)
+        {
+            FirebaseUser user = mAuth.getCurrentUser();
+            recipe.setUid(user.getUid());
 
-        db.collection("recipes")
-                .add(recipe)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        //startActivity(new Intent(RecipeDetailScreenActivity.this,RecipeMainScreenActivity.class));
-                        finish();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //Log.w(TAG, "Error adding document", e);
-                        showSnackbar(R.string.ErrorSave);
-                    }
-                });
+            db.collection("recipes")
+                    .add(recipe)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            //startActivity(new Intent(RecipeDetailScreenActivity.this,RecipeMainScreenActivity.class));
+                            finish();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //Log.w(TAG, "Error adding document", e);
+                            showSnackbar(R.string.ErrorSave);
+                        }
+                    });
+        }
+        else {
+            db.collection("recipes").document(recipe.getId())
+                    .set(recipe)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            //Log.d(TAG, "DocumentSnapshot successfully written!");
+                            finish();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //Log.w(TAG, "Error writing document", e);
+                            showSnackbar(R.string.ErrorSave);
+                        }
+                    });
+
+        }
     }
 
     private void showSnackbar(int message){

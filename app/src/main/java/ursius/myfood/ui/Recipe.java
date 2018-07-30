@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Recipe implements Serializable
 {
+    private String id;
     private String uid;
     private String title;
     private String description;
@@ -18,7 +19,8 @@ public class Recipe implements Serializable
     public Recipe() {
     }
 
-    public Recipe(String uid, String title, String description, Date lastEaten, double points, String remarks, List<String> ingredients) {
+    public Recipe(String id,String uid, String title, String description, Date lastEaten, double points, String remarks, List<String> ingredients) {
+        this.id = id;
         this.uid = uid;
         this.title = title;
         this.description = description;
@@ -82,5 +84,13 @@ public class Recipe implements Serializable
 
     public void setUid(String uid) {
         this.uid = uid;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

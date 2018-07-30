@@ -10,7 +10,7 @@
     <string name="TextViewRecipePoints">Points:</string>
     <string name="TextViewRecipeRemarks">Remarks:</string>
     <string name="ButtonDatePicker">Pick Date</string>
-    <string name="buttonSaveText">Save Recipe</string>
+    <string name="buttonSaveText">Save</string>
     <string name="ErrorSave">Error saving</string>
     <string name="sign_out">Sign Out</string>
 
