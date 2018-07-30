@@ -2,7 +2,6 @@ package ursius.myfood.ui.recipedetailscreen;
 
 import android.app.DatePickerDialog;
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,7 +27,6 @@ import java.util.Date;
 import ursius.myfood.R;
 import ursius.myfood.service.pickers.DatePickerFragment;
 import ursius.myfood.ui.Recipe;
-import ursius.myfood.ui.recipemainscreen.RecipeMainScreenActivity;
 
 public class RecipeDetailScreenActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
@@ -103,7 +101,8 @@ public class RecipeDetailScreenActivity extends AppCompatActivity implements Dat
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        startActivity(new Intent(RecipeDetailScreenActivity.this,RecipeMainScreenActivity.class));
+                        //startActivity(new Intent(RecipeDetailScreenActivity.this,RecipeMainScreenActivity.class));
+                        finish();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {

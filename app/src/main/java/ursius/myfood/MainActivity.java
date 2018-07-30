@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.firebase.ui.auth.AuthUI;
@@ -33,7 +34,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import ursius.myfood.ui.Recipe;
@@ -86,11 +89,20 @@ public class MainActivity extends AppCompatActivity {
 
             adapter = new FirestoreRecyclerAdapter<Recipe, MainActivity.RecipeHolder>(options) {
                 @Override
-                public void onBindViewHolder(MainActivity.RecipeHolder holder, int position, Recipe model) {
+                public void onBindViewHolder(MainActivity.RecipeHolder holder, int position, final Recipe model) {
                     // Bind the Recipe object to the RecipeHolder
                     // ...
                     holder.setTitle(model.getTitle());
                     holder.setDescription(model.getDescription());
+                    holder.setLastEaten(model.getLastEaten());
+                    holder.setRatingBar(model.getPoints());
+
+                    holder.container.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View v){
+                            Log.i("INFO", "clicked on " + model.getTitle());
+                        }
+                    });
                 }
 
                 @Override
@@ -98,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                     // Create a new instance of the ViewHolder, in this case we are using a custom
                     // layout called R.layout.message for each item
                     View view = LayoutInflater.from(group.getContext())
-                            .inflate(R.layout.item_recipe, group, false);
+                            .inflate(R.layout.item_suggestion, group, false);
 
                     return new MainActivity.RecipeHolder(view);
                 }
@@ -212,28 +224,19 @@ public class MainActivity extends AppCompatActivity {
 
         private TextView mTextViewTitle;
         private TextView mTextViewDescription;
-        private TextView mEditTextView;
-        private TextView mDeleteTextView;
+        private TextView mTextViewLastEaten;
+        private RatingBar mRatingBar;
+        private ViewGroup container;
 
         public RecipeHolder(View itemView) {
             super(itemView);
 
-            this.mEditTextView = itemView.findViewById(R.id.btnEdit);
-            this.mDeleteTextView = itemView.findViewById(R.id.btnDelete);
-
-            mEditTextView.setOnClickListener(this);
-            mDeleteTextView.setOnClickListener(this);
+            this.container = (ViewGroup) itemView.findViewById(R.id.root_item_suggestion);
         }
 
         @Override
         public void onClick(View view) {
-            /*Recipe recipe = listOfRecipes.get(this.getAdapterPosition());
-            Recipe item = mDataset.get(this.getAdapterPosition());
-            if (view.getId() == mEditTextView.getId()){
-                mRecyclerViewClickListener.onEditClick(item,view);
-            } else if(view.getId() == mDeleteTextView.getId()){
-                mRecyclerViewClickListener.onDeleteClick(item,view);
-            }*/
+
         }
 
         public void setTitle(String title) {
@@ -245,6 +248,19 @@ public class MainActivity extends AppCompatActivity {
         public void setDescription(String description) {
             this.mTextViewDescription = itemView.findViewById(R.id.textView_recipe_description);
             mTextViewDescription.setText(description);
+        }
+
+        public void setLastEaten(Date lastEaten) {
+            this.mTextViewLastEaten = itemView.findViewById(R.id.textViewLastEaten);
+            SimpleDateFormat sm = new SimpleDateFormat("dd/MM/yyyy");
+            String strDate = "";
+            if (lastEaten != null)
+                strDate = sm.format(lastEaten);
+            mTextViewLastEaten.setText("Last eaten: " + strDate);
+        }
+        public void setRatingBar(double points) {
+            this.mRatingBar = itemView.findViewById(R.id.ratingBar);
+            mRatingBar.setRating((float) points);
         }
     }
     @Override
