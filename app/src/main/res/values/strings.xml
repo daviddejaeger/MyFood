@@ -3,7 +3,7 @@
     <string name="sign_in_cancelled">Sign in was cancelled</string>
     <string name="no_internet_connection">No internet connection</string>
     <string name="unknown_error">Unknown error</string>
-    <string name="recipes">Recipes</string>
+    <string name="recipes">Manage recipes</string>
     <string name="TextViewRecipeTitle">Title:</string>
     <string name="TextViewRecipeDescription">Description:</string>
     <string name="TextViewRecipeLastEaten">Last Eaten:</string>

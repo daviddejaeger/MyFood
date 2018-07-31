@@ -21,15 +21,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Spaghetti Bolognaise" />
 
-    <TextView
-        android:id="@+id/textView_recipe_description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewLastEaten"
-        tools:text="Snelle manier met frito" />
+    <!--<TextView-->
+        <!--android:id="@+id/textView_recipe_description"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="24dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textViewLastEaten"-->
+        <!--tools:text="Snelle manier met frito" />-->
 
     <RatingBar
         android:id="@+id/ratingBar"

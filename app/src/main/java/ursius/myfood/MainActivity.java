@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 import ursius.myfood.ui.Recipe;
+import ursius.myfood.ui.recipedetailscreen.RecipeDetailScreenActivity;
 import ursius.myfood.ui.recipemainscreen.RecipeMainScreenActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -77,9 +78,8 @@ public class MainActivity extends AppCompatActivity {
 
             Query query = FirebaseFirestore.getInstance()
                     .collection("recipes")
-                    .whereEqualTo("uid",user.getUid());
-
-            query.get();
+                    .whereEqualTo("uid",user.getUid())
+                    .orderBy("suggestionValue", Query.Direction.DESCENDING);
 
             // Configure recycler adapter options:
             //  * query is the Query object defined above.
@@ -94,14 +94,17 @@ public class MainActivity extends AppCompatActivity {
                     // Bind the Recipe object to the RecipeHolder
                     // ...
                     holder.setTitle(model.getTitle());
-                    holder.setDescription(model.getDescription());
+                    //holder.setDescription(model.getDescription());
                     holder.setLastEaten(model.getLastEaten());
                     holder.setRatingBar(model.getPoints());
 
                     holder.container.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View v){
-                            Log.i("INFO", "clicked on " + model.getTitle());
+                            //Log.i("INFO", "clicked on " + model.getTitle());
+                            Intent intent = new Intent(MainActivity.this, RecipeDetailScreenActivity.class);
+                            intent.putExtra("RECIPE", model);
+                            startActivity(intent);
                         }
                     });
                 }
@@ -224,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
     private class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView mTextViewTitle;
-        private TextView mTextViewDescription;
+        //private TextView mTextViewDescription;
         private TextView mTextViewLastEaten;
         private RatingBar mRatingBar;
         private ViewGroup container;
@@ -246,10 +249,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        public void setDescription(String description) {
-            this.mTextViewDescription = itemView.findViewById(R.id.textView_recipe_description);
-            mTextViewDescription.setText(description);
-        }
+//        public void setDescription(String description) {
+//            this.mTextViewDescription = itemView.findViewById(R.id.textView_recipe_description);
+//            mTextViewDescription.setText(description);
+//        }
 
         public void setLastEaten(Date lastEaten) {
             this.mTextViewLastEaten = itemView.findViewById(R.id.textViewLastEaten);

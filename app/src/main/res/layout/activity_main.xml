@@ -31,21 +31,20 @@
             android:layout_marginTop="16dp"
             android:text="@string/MainActivityTitle"
             android:textAppearance="@android:style/TextAppearance.Material.Title"
-            app:layout_constraintEnd_toStartOf="@+id/buttonRecalculate"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/buttonRecalculate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:text="@string/ButtonRecalculate"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textViewTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/textViewTitle" />
+        <!--<Button-->
+            <!--android:id="@+id/buttonRecalculate"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="32dp"-->
+            <!--android:text="@string/ButtonRecalculate"-->
+            <!--app:layout_constraintBaseline_toBaselineOf="@+id/textViewTitle"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.5"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textViewTitle" />-->
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/my_recycler_view"
