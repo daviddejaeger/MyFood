@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
         if (mAuth.getCurrentUser() != null) {
             // already signed in
             FirebaseUser user = mAuth.getCurrentUser();
-            //ToDO: Show user in toolbar and rest of MainActivity
 
             mRecyclerView = findViewById(R.id.my_recycler_view);
 
@@ -79,6 +78,8 @@ public class MainActivity extends AppCompatActivity {
             Query query = FirebaseFirestore.getInstance()
                     .collection("recipes")
                     .whereEqualTo("uid",user.getUid());
+
+            query.get();
 
             // Configure recycler adapter options:
             //  * query is the Query object defined above.

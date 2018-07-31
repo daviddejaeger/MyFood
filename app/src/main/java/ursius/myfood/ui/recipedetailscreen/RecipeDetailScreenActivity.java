@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -118,6 +119,8 @@ public class RecipeDetailScreenActivity extends AppCompatActivity implements Dat
         recipe.setRemarks(mRemarks.getText().toString());
         recipe.setPoints(mRating.getRating());
 
+        recipe.calculateSuggestionValue();
+
         if (isNew)
         {
             FirebaseUser user = mAuth.getCurrentUser();
@@ -159,6 +162,13 @@ public class RecipeDetailScreenActivity extends AppCompatActivity implements Dat
                     });
 
         }
+    }
+
+    private void calcuteSuggestionValue(Recipe recipe)
+    {
+        double points = recipe.getPoints();
+        Date lastEaten = recipe.getLastEaten();
+
     }
 
     private void showSnackbar(int message){
